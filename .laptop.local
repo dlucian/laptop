@@ -9,3 +9,9 @@ if [ -f "$HOME/Brewfile.local" ]; then
     fancy_echo "Some items in Brewfile.local were not installed successfully."
   fi
 fi
+
+brew cask install github
+brew cask install iterm2
+brew cask install alfred
+
+fancy_echo "You'll need to manually enable accessibility"
