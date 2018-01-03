@@ -6,6 +6,6 @@ tap 'homebrew/services'
 
 brew 'hub'
 
-cask 'github-desktop'
+cask 'github'
 
 cask 'sublime-text'
