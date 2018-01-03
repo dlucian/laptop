@@ -21,8 +21,6 @@ I support clean installations of these operating systems:
 
 * [macOS Sierra](https://www.apple.com/macos/sierra/) (10.12)
 * OS X El Capitan (10.11)
-* OS X Yosemite (10.10)
-* OS X Mavericks (10.9)
 
 Older versions may work but aren't regularly tested. Bug reports for older
 versions are welcome.
@@ -39,7 +37,7 @@ and once it appears, press `return` to launch it.
 In your Terminal window, copy and paste the command below, then press `return`.
 
 ```sh
-bash <(curl -s https://raw.githubusercontent.com/monfresh/laptop/master/laptop)
+bash <(curl -s https://raw.githubusercontent.com/dlucian/laptop/master/laptop)
 ```
 
 The [script](https://github.com/monfresh/laptop/blob/master/mac) itself is
