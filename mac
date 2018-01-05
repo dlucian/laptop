@@ -20,14 +20,6 @@ append_to_file() {
   fi
 }
 
-create_zshrc_and_set_it_as_shell_file() {
-  if [ ! -f "$HOME/.zshrc" ]; then
-    touch "$HOME/.zshrc"
-  fi
-
-  shell_file="$HOME/.zshrc"
-}
-
 create_bash_profile_and_set_it_as_shell_file() {
   if [ ! -f "$HOME/.bash_profile" ]; then
     touch "$HOME/.bash_profile"
@@ -40,7 +32,6 @@ change_shell_to_zsh() {
   fancy_echo "Please enter your password to continue."
   echo "Note that there won't be visual feedback when you type your password."
   echo "Type it slowly and press return, or press control-c to cancel the switch to zsh and exit the script."
-  create_zshrc_and_set_it_as_shell_file
   chsh -s "$(which zsh)"
   echo "Note that you can always switch back to ${bold}bash${normal} if you change your mind."
   echo "The instructions for changing shells manually are available in the README."
@@ -57,38 +48,28 @@ fi
 
 case "$SHELL" in
   */zsh) :
-    create_zshrc_and_set_it_as_shell_file
+    # Nothing to do here
     ;;
   *)
     create_bash_profile_and_set_it_as_shell_file
     if [ -z "$CI" ]; then
       bold=$(tput bold)
       normal=$(tput sgr0)
-      echo "Want to switch your shell from the default ${bold}bash${normal} to ${bold}zsh${normal}?"
-      echo "Both work fine for development, and ${bold}zsh${normal} has some extra "
-      echo "features for customization and tab completion."
-      echo "If you aren't sure or don't care, we recommend ${bold}zsh${normal}."
-      echo -n "Press ${bold}y${normal} to switch to zsh, ${bold}n${normal} to keep bash: "
-      read -r -n 1 response
-      if [ "$response" = "y" ]; then
-        fancy_echo "=== Getting ready to change your shell to zsh. ==="
-        if ! grep -qs "$(which zsh)" /etc/shells; then
-          echo "It looks like your version of zsh is missing from ${bold}/etc/shells${normal}."
-          echo "It must be added there manually before your shell can be changed."
-          echo "Open ${bold}/etc/shells${normal} with your favorite text editor,"
-          echo "then add ${bold}$(which zsh)${normal} in a new line and save the file."
-          echo -n "Once you've added it, press ${bold}y${normal} to continue, or ${bold}n${normal} to cancel: "
-          read -r -n 1 response
-          if [ "$response" = "y" ]; then
-            change_shell_to_zsh
-          else
-            fancy_echo "Shell will not be changed."
-          fi
-        else
+      fancy_echo "=== Getting ready to change your shell to zsh. ==="
+      if ! grep -qs "$(which zsh)" /etc/shells; then
+        echo "It looks like your version of zsh is missing from ${bold}/etc/shells${normal}."
+        echo "It must be added there manually before your shell can be changed."
+        echo "Open ${bold}/etc/shells${normal} with your favorite text editor,"
+        echo "then add ${bold}$(which zsh)${normal} in a new line and save the file."
+        echo -n "Once you've added it, press ${bold}y${normal} to continue, or ${bold}n${normal} to cancel: "
+        read -r -n 1 response
+        if [ "$response" = "y" ]; then
           change_shell_to_zsh
+        else
+          fancy_echo "Shell will not be changed."
         fi
       else
-        fancy_echo "Shell will not be changed."
+        change_shell_to_zsh
       fi
     else
       fancy_echo "CI System detected, will not change shells"
@@ -130,18 +111,14 @@ switch_to_latest_ruby() {
   chruby "ruby-$(latest_installed_ruby)"
 }
 
-append_to_file "$shell_file" "alias laptop='bash <(curl -s https://raw.githubusercontent.com/dlucian/laptop/master/laptop)'"
-
-# shellcheck disable=SC2016
-append_to_file "$shell_file" 'export PATH="$HOME/.bin:$PATH"'
+fancy_echo "Installing Xcode command-line tools..."
+set XCODE_INSTALLED = `xcode-select --install | grep "already installed"`
 
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew ..."
     curl -fsS \
       'https://raw.githubusercontent.com/Homebrew/install/master/install' | ruby
 
-    # shellcheck disable=SC2016
-    append_to_file "$shell_file" 'export PATH="/usr/local/bin:$PATH"'
 else
   fancy_echo "Homebrew already installed. Skipping ..."
 fi
@@ -176,9 +153,6 @@ else
   echo "in which case, you can ignore these errors."
 fi
 
-# shellcheck disable=SC2016
-append_to_file "$shell_file" 'eval "$(hub alias -s)"'
-
 append_to_file "$HOME/.gemrc" 'gem: --no-document'
 
 if command -v rbenv >/dev/null || command -v rvm >/dev/null; then
@@ -192,12 +166,7 @@ else
     brew 'ruby-install'
 EOF
 
-    append_to_file "$shell_file" 'source /usr/local/share/chruby/chruby.sh'
-    append_to_file "$shell_file" 'source /usr/local/share/chruby/auto.sh'
-
     ruby-install ruby
-
-    append_to_file "$shell_file" "chruby ruby-$(latest_installed_ruby)"
 
     switch_to_latest_ruby
   else
@@ -230,46 +199,6 @@ number_of_cores=$(sysctl -n hw.ncpu)
 bundle config --global jobs $((number_of_cores - 1))
 
 fancy_echo '...Finished Ruby installation checks.'
-
-no_prompt_customizations_in_shell_file() {
-  ! grep -qs -e "PS1=" -e "precmd" -e "PROMPT=" "$shell_file"
-}
-
-no_zsh_frameworks() {
-  [ ! -d "$HOME/.oh-my-zsh" ] && [ ! -d "$HOME/.zpresto" ] && [ ! -d "$HOME/.zim" ] && [ ! -d "$HOME/.zplug" ]
-}
-
-if [ -z "$CI" ] && no_zsh_frameworks && no_prompt_customizations_in_shell_file; then
-  echo -n "Would you like to customize your prompt to display the current directory and ruby version? [y/n]: "
-  read -r -n 1 response
-  if [ "$response" = "y" ]; then
-    if ! grep -qs "prompt_ruby_info()" "$shell_file"; then
-      cat <<EOT >> "$shell_file"
-
-  prompt_ruby_info() {
-    if [ -f ".ruby-version" ]; then
-      cat .ruby-version
-    fi
-  }
-EOT
-    fi
-    # shellcheck disable=SC2016
-    append_to_file "$shell_file" 'GREEN=$(tput setaf 65)'
-    # shellcheck disable=SC2016
-    append_to_file "$shell_file" 'ORANGE=$(tput setaf 166)'
-    # shellcheck disable=SC2016
-    append_to_file "$shell_file" 'NORMAL=$(tput sgr0)'
-    # display pwd in orange, current ruby version in green,
-    # and set prompt character to $
-    # shellcheck disable=SC2016
-    append_to_file "$shell_file" 'precmd () { PS1="${ORANGE}[%~] ${GREEN}$(prompt_ruby_info) ${NORMAL}$ " }'
-    # display directories and files in different colors when running ls
-    append_to_file "$shell_file" 'export CLICOLOR=1;'
-    append_to_file "$shell_file" 'export LSCOLORS=exfxcxdxbxegedabagacad;'
-  else
-    fancy_echo "Skipping prompt customization."
-  fi
-fi
 
 if app_is_installed 'GitHub'; then
   fancy_echo "It looks like you've already configured your GitHub SSH keys."
