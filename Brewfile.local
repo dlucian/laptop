@@ -1,5 +1,25 @@
-cask 'atom'
-cask 'cloud'
-cask 'firefox'
-cask 'iterm2'
-brew 'redis'
+cask '1password.rb'
+
+cask 'backblaze'
+
+cask 'commander-one'
+
+cask 'cloudapp'
+
+cask 'daisydisk'
+
+cask 'evernote'
+
+cask 'fantastical'
+
+cask 'paw'
+
+cask 'querious'
+
+cask 'redis'
+
+cask 'spotify'
+
+cask 'skype'
+
+cask 'vlc'
