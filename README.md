@@ -1,6 +1,5 @@
 Laptop
 ======
-[![Build Status](https://travis-ci.org/monfresh/laptop.svg)](https://travis-ci.org/monfresh/laptop)
 
 Laptop is a script to set up an OS X computer for web development, and to keep
 it up to date.
@@ -8,11 +7,10 @@ it up to date.
 It can be run multiple times on the same machine safely. It installs,
 upgrades, or skips packages based on what is already installed on the machine.
 
-This particular version of the script is geared toward beginners who want to
-set up a Ruby on Rails environment on their Mac. More advanced users can
-easily [customize](#customize-in-laptoplocal) the script to install additional
-tools. To see an example of a more advanced script, check out
-[18F/laptop](https://github.com/18F/laptop).
+The original [script](https://github.com/monfresh/laptop/blob/master/mac) by 
+monfresh is geard toward beginners who want to set up a Ruby on Rails 
+environment on their Mac. However, this forked version is geared towards a more
+generic development machine, with PHP and Node. 
 
 Requirements
 ------------
@@ -40,7 +38,7 @@ In your Terminal window, copy and paste the command below, then press `return`.
 bash <(curl -s https://raw.githubusercontent.com/dlucian/laptop/master/laptop)
 ```
 
-The [script](https://github.com/monfresh/laptop/blob/master/mac) itself is
+The [script](https://github.com/dlucian/laptop/blob/master/mac) itself is
 available in this repo for you to review if you want to see what it does
 and how it works.
 
@@ -75,30 +73,22 @@ What it sets up
 
 * [Bundler] for managing Ruby gems
 * [chruby] for managing [Ruby] versions
-* [Flux] for adjusting your Mac's display color so you can sleep better
 * [GitHub Desktop] for setting up your SSH keys automatically
-* [Heroku Toolbelt] for deploying and managing Heroku apps
 * [Homebrew] for managing operating system libraries
 * [Homebrew Cask] for quickly installing Mac apps from the command line
 * [Homebrew Services] so you can easily stop, start, and restart services
 * [hub] for interacting with the GitHub API
-* [PhantomJS] for headless website testing
-* [Postgres] for storing relational data
 * [ruby-install] for installing different versions of Ruby
 * [Sublime Text 3] for coding all the things
-* [Zsh] as your shell (if you opt in)
+* [Zsh] as your shell
 
 [Bundler]: http://bundler.io/
 [chruby]: https://github.com/postmodern/chruby
-[Flux]: https://justgetflux.com/
 [GitHub Desktop]: https://desktop.github.com/
-[Heroku Toolbelt]: https://toolbelt.heroku.com/
 [Homebrew]: http://brew.sh/
 [Homebrew Cask]: http://caskroom.io/
 [Homebrew Services]: https://github.com/Homebrew/homebrew-services
 [hub]: https://github.com/github/hub
-[PhantomJS]: http://phantomjs.org/
-[Postgres]: http://www.postgresql.org/
 [Ruby]: https://www.ruby-lang.org/en/
 [ruby-install]: https://github.com/postmodern/ruby-install
 [Sublime Text 3]: http://www.sublimetext.com/3
@@ -107,45 +97,6 @@ What it sets up
 It should take less than 15 minutes to install (depends on your machine and
 internet connection).
 
-The script also lightly customizes your shell prompt so that it displays your
-current directory in orange, followed by the current Ruby version or gemset in
-green, and sets the prompt character to `$`. It also allows you to easily
-distinguish directories from files when running `ls` by displaying directories
-in a different color. Below is a screenshot showing what the colors look like
-when using the default Terminal white background, the Solarized Dark theme, and the Solarized Light theme.
-
-![Terminal screenshots](http://cl.ly/image/19022S0q3H1b/download/Image%202015-05-12%20at%2011.31.04%20PM.png)
-
-If you want to use the [Solarized](http://ethanschoonover.com/solarized)
-themes, run the following commands in your Terminal:
-```bash
-cd ~
-
-curl --remote-name https://raw.githubusercontent.com/tomislav/osx-terminal.app-colors-solarized/master/Solarized%20Dark.terminal
-
-curl --remote-name https://raw.githubusercontent.com/tomislav/osx-terminal.app-colors-solarized/master/Solarized%20Light.terminal
-
-open Solarized%20Dark.terminal
-
-open Solarized%20Light.terminal
-```
-
-This will add the Solarized themes to your Terminal's Profiles, and if you want to set one of them as the default, go to your Terminal's Preferences,
-click on the Settings tab, scroll down to the Solarized Profile, click on it,
-then click the Default button. When you open a new window or tab (or if you quit and relaunch Terminal), it will use the Solarized theme.
-
-If you want to try out different prompt colors other than orange and green,
-open your `.zshrc` or `.bash_profile` in Sublime Text:
-
-```sh
-subl ~/.zshrc
-```
-
-Then in the line that starts with `precmd`, replace `{166}` and `{65}` with
-any of the 256 possible [Xterm colors](http://upload.wikimedia.org/wikipedia/commons/9/95/Xterm_color_chart.png).
-Save the file, then open a new Terminal window or tab to see the changes.
-
-
 Customize in `~/.laptop.local` and `~/Brewfile.local`
 -----------------------------------------------------
 ```sh
@@ -153,8 +104,8 @@ Customize in `~/.laptop.local` and `~/Brewfile.local`
 cd ~
 
 # Download the sample files to your computer
-curl --remote-name https://raw.githubusercontent.com/monfresh/laptop/master/.laptop.local
-curl --remote-name https://raw.githubusercontent.com/monfresh/laptop/master/Brewfile.local
+curl --remote-name https://raw.githubusercontent.com/dlucian/laptop/master/.laptop.local
+curl --remote-name https://raw.githubusercontent.com/dlucian/laptop/master/Brewfile.local
 
 # open the files in Sublime Text
 subl .laptop.local
