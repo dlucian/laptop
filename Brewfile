@@ -14,8 +14,6 @@ cask 'cyberduck'
 
 cask 'google-chrome'
 
-cask 'virtualbox'
-
 cask 'cloudapp'
 
 cask 'spotify'
