@@ -1,4 +1,4 @@
-cask '1password.rb'
+cask '1password'
 
 cask 'backblaze'
 
@@ -16,7 +16,7 @@ cask 'paw'
 
 cask 'querious'
 
-cask 'redis'
+brew 'redis'
 
 cask 'spotify'
 

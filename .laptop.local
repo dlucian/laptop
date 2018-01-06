@@ -1,11 +1,11 @@
 #!/bin/sh
 
-fancy_echo "Running your customizations from ~/.laptop.local ..."
+echo "\nRunning your customizations from .laptop.local ...\n"
 
-if [ -f "$HOME/Brewfile.local" ]; then
-  if brew bundle --file="$HOME/Brewfile.local"; then
-    fancy_echo "All items in Brewfile.local were installed successfully."
+if [ -f "Brewfile.local" ]; then
+  if brew bundle --file="Brewfile.local"; then
+    echo "\nAll items in Brewfile.local were installed successfully.\n"
   else
-    fancy_echo "Some items in Brewfile.local were not installed successfully."
+    echo "\nSome items in Brewfile.local were not installed successfully.\n"
   fi
 fi
