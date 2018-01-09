@@ -28,6 +28,9 @@ defaults write com.apple.dock persistent-others -array-add '{ "tile-data" = { "l
 # Dock show/hide delay in ms
 defaults write com.apple.Dock autohide-delay -float 0
 
+# Save screenshots in Downloads folder
+defaults write com.apple.screencapture location ~/Downloads
+
 # Restart Dock
 killall Dock
 
